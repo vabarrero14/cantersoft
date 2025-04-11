@@ -8,10 +8,10 @@ const Sidebar = () => {
   const location = useLocation(); // Hook para obtener la ruta actual
 
   // Función para resaltar el item activo
-  const isActive = (path) => location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
+  const isActive = (path) => location.pathname === path ? { backgroundColor: '#1976d2', color: '#fff' } : {};
 
   return (
-    <div style={{ width: 250, height: '100vh', backgroundColor: '#fafafa' }}>
+    <div style={{ width: 250, height: '100vh', backgroundColor: '#fafafa', borderRight: '1px solid #ddd' }}>
       <List>
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/" sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
@@ -19,6 +19,8 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
+        
+        {/* Enlace a Compras */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/compras" sx={isActive('/compras')}>
             <ShoppingCart sx={{ marginRight: 2 }} />
@@ -26,6 +28,8 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
+        
+        {/* Enlace a Stock */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/stock" sx={isActive('/stock')}>
             <Inventory sx={{ marginRight: 2 }} />
@@ -33,6 +37,8 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
+        
+        {/* Enlace a Ventas */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/ventas" sx={isActive('/ventas')}>
             <Receipt sx={{ marginRight: 2 }} />
@@ -40,6 +46,8 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
+        
+        {/* Enlace a Caja */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/caja" sx={isActive('/caja')}>
             <CreditCard sx={{ marginRight: 2 }} />
