@@ -5,6 +5,8 @@ import ProductoList from '../modules/stock/ProductoList';
 import ProductoForm from '../modules/stock/ProductoForm';
 import CategoriaForm from '../modules/categorias/CategoriaForm';
 import CategoriaList from '../modules/categorias/CategoriaList';
+import ProveedorForm from '../modules/proveedor/ProveedorForm';
+import ProveedorList from '../modules/proveedor/ProveedorList';
 
 const Compras = () => <div>Vista de Compras</div>;
 const Ventas = () => <div>Vista de Ventas</div>;
@@ -20,7 +22,9 @@ const Content = () => {
         <Route path="/stock/listado" element={<ProductoList />} />
         <Route path="/stock/nuevo" element={<ProductoForm />} />
         <Route path="/categorias" element={<CategoriaList />} />
-        <Route path="/categorias/nueva" element={<CategoriaForm />} />  
+        <Route path="/categorias/nueva" element={<CategoriaForm />} />
+        <Route path="/proveedores" element={<ProveedorList />} />
+        <Route path="/proveedores/nuevo" element={<ProveedorForm />} />
       </Routes>
     </div>
   );

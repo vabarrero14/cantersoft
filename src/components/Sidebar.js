@@ -6,13 +6,14 @@ import {
 } from '@mui/material';
 import {
   ShoppingCart, Inventory, Receipt, CreditCard,
-  ExpandLess, ExpandMore, List as ListIcon, AddBox, Category
+  ExpandLess, ExpandMore, List as ListIcon, AddBox, Category, People
 } from '@mui/icons-material';
 
 const Sidebar = () => {
   const location = useLocation();
   const [openStock, setOpenStock] = useState(true);
   const [openCategorias, setOpenCategorias] = useState(false);
+  const [openProveedores, setOpenProveedores] = useState(false);
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -106,6 +107,36 @@ const Sidebar = () => {
               component={Link}
               to="/categorias/nueva"
               sx={{ pl: 4, ...isActive('/categorias/nueva') }}
+            >
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <Divider />
+
+        {/* Proveedores */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => setOpenProveedores(!openProveedores)}>
+            <People sx={{ marginRight: 2 }} />
+            <ListItemText primary="Proveedores" />
+            {openProveedores ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openProveedores} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/proveedores"
+              sx={{ pl: 4, ...isActive('/proveedores') }}
+            >
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton
+              component={Link}
+              to="/proveedores/nuevo"
+              sx={{ pl: 4, ...isActive('/proveedores/nuevo') }}
             >
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar" />
