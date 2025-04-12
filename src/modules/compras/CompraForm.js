@@ -1,7 +1,6 @@
-// src/modules/compras/ComprasForm.js
 import React, { useState, useEffect } from 'react';
 import {
-  TextField, Button, Paper, Typography, MenuItem, FormControl, Select, InputLabel, IconButton
+  TextField, Button, Paper, Typography, MenuItem, FormControl, Select, InputLabel, IconButton, Autocomplete
 } from '@mui/material';
 import { AddCircle, RemoveCircle } from '@mui/icons-material';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
@@ -96,16 +95,13 @@ const ComprasForm = () => {
         {factura.items.map((item, index) => (
           <div key={index} style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 10 }}>
             <FormControl style={{ flex: 2 }}>
-              <InputLabel>Producto</InputLabel>
-              <Select
-                value={item.productoId}
-                onChange={(e) => handleItemChange(index, 'productoId', e.target.value)}
-                required
-              >
-                {productos.map(p => (
-                  <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>
-                ))}
-              </Select>
+              {/* Autocomplete para productos */}
+              <Autocomplete value={productos.find(p => p.codigo === item.productoId) || null} onChange={(e, newValue) => handleItemChange(index, 'productoId', newValue ? newValue.codigo : '')} options={productos}
+  getOptionLabel={(option) => `${option.codigo} - ${option.nombre}`}
+  isOptionEqualToValue={(option, value) => option.codigo === value.codigo}
+  renderInput={(params) => <TextField {...params} label="Producto" />}
+/>
+
             </FormControl>
             <TextField
               type="number"

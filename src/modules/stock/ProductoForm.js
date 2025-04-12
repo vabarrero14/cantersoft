@@ -7,6 +7,7 @@ import { db } from '../../firebase/config';
 
 const ProductoForm = () => {
   const [producto, setProducto] = useState({
+    codigo: '', // Nuevo campo de código
     nombre: '',
     cantidad: '',
     precioCompra: '',
@@ -52,6 +53,7 @@ const ProductoForm = () => {
       });
       alert('Producto agregado con éxito');
       setProducto({
+        codigo: '', // Limpiar campo código
         nombre: '',
         cantidad: '',
         precioCompra: '',
@@ -73,11 +75,64 @@ const ProductoForm = () => {
     <Paper elevation={3} style={{ padding: 20 }}>
       <Typography variant="h6" gutterBottom>Agregar nuevo producto</Typography>
       <form onSubmit={handleSubmit}>
-        <TextField name="nombre" label="Nombre" value={producto.nombre} onChange={handleChange} fullWidth margin="normal" required />
-        <TextField name="cantidad" label="Cantidad" type="number" value={producto.cantidad} onChange={handleChange} fullWidth margin="normal" required />
-        <TextField name="precioCompra" label="Precio de Compra" type="number" value={producto.precioCompra} onChange={handleChange} fullWidth margin="normal" required />
-        <TextField name="precioVenta" label="Precio de Venta" type="number" value={producto.precioVenta} onChange={handleChange} fullWidth margin="normal" required />
-        <TextField name="stockMinimo" label="Stock Mínimo" type="number" value={producto.stockMinimo} onChange={handleChange} fullWidth margin="normal" />
+        {/* Campo de Código */}
+        <TextField
+          name="codigo"
+          label="Código"
+          value={producto.codigo}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          name="nombre"
+          label="Nombre"
+          value={producto.nombre}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          name="cantidad"
+          label="Cantidad"
+          type="number"
+          value={producto.cantidad}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          name="precioCompra"
+          label="Precio de Compra"
+          type="number"
+          value={producto.precioCompra}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          name="precioVenta"
+          label="Precio de Venta"
+          type="number"
+          value={producto.precioVenta}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          name="stockMinimo"
+          label="Stock Mínimo"
+          type="number"
+          value={producto.stockMinimo}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
 
         {/* Marca */}
         <FormControl fullWidth margin="normal">
@@ -89,7 +144,14 @@ const ProductoForm = () => {
           </Select>
         </FormControl>
 
-        <TextField name="medida" label="Medida" value={producto.medida} onChange={handleChange} fullWidth margin="normal" />
+        <TextField
+          name="medida"
+          label="Medida"
+          value={producto.medida}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
 
         {/* Categoría */}
         <FormControl fullWidth margin="normal">
@@ -111,7 +173,16 @@ const ProductoForm = () => {
           </Select>
         </FormControl>
 
-        <TextField name="observacion" label="Observación" value={producto.observacion} onChange={handleChange} fullWidth margin="normal" multiline rows={3} />
+        <TextField
+          name="observacion"
+          label="Observación"
+          value={producto.observacion}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          multiline
+          rows={3}
+        />
         <Button type="submit" variant="contained" color="primary">Guardar</Button>
       </form>
     </Paper>

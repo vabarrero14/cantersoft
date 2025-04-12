@@ -1,4 +1,3 @@
-// src/modules/compras/ComprasList.js
 import React, { useEffect, useState } from 'react';
 import {
   Paper, Typography, Table, TableBody, TableCell, TableContainer,
@@ -46,8 +45,13 @@ const ComprasList = () => {
                 <TableCell>{compra.proveedor}</TableCell>
                 <TableCell>{compra.total.toFixed(2)}</TableCell>
                 <TableCell>
-                  {/* Si después querés ver más detalles o editar */}
-                  <Button variant="outlined" size="small">Ver</Button>
+                  <Button 
+                    variant="outlined" 
+                    size="small" 
+                    onClick={() => navigate(`/compras/${compra.id}`)}
+                  >
+                    Ver
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -46,6 +46,7 @@ const ProductoList = () => {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Codigo</TableCell>
               <TableCell>Nombre</TableCell>
               <TableCell>Cantidad</TableCell>
               <TableCell>Precio Compra</TableCell>
@@ -60,6 +61,7 @@ const ProductoList = () => {
           <TableBody>
             {productos.map((prod) => (
               <TableRow key={prod.id}>
+                <TableCell>{prod.codigo}</TableCell>
                 <TableCell>{prod.nombre}</TableCell>
                 <TableCell>{prod.cantidad}</TableCell>
                 <TableCell>{prod.precioCompra}</TableCell>
