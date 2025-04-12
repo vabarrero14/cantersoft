@@ -9,6 +9,8 @@ import ProveedorForm from '../modules/proveedor/ProveedorForm';
 import ProveedorList from '../modules/proveedor/ProveedorList';
 import MarcaForm from '../modules/marcas/MarcaForm';
 import MarcaList from '../modules/marcas/MarcaList';
+import ProductoEdit from '../modules/stock/ProductoEdit';
+
 
 const Compras = () => <div>Vista de Compras</div>;
 const Ventas = () => <div>Vista de Ventas</div>;
@@ -29,6 +31,7 @@ const Content = () => {
         <Route path="/proveedores/nuevo" element={<ProveedorForm />} />
         <Route path="/marcas" element={<MarcaList />} />
         <Route path="/marcas/nueva" element={<MarcaForm />} />
+        <Route path="/producto/editar/:id" element={<ProductoEdit />} />        
       </Routes>
     </div>
   );
