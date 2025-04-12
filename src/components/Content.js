@@ -13,6 +13,10 @@ import ProductoEdit from '../modules/stock/ProductoEdit';
 import ComprasList from '../modules/compras/CompraList';
 import ComprasForm from '../modules/compras/CompraForm';
 import CompraDetail from '../modules/compras/CompraDetail';
+import ClienteList from '../modules/clientes/ClienteList';
+import ClienteForm from '../modules/clientes/ClienteForm';
+import ClienteEdit from '../modules/clientes/ClienteEdit'; 
+
 
 
 
@@ -37,7 +41,10 @@ const Content = () => {
         <Route path="/producto/editar/:id" element={<ProductoEdit />} />
         <Route path="/compras" element={<ComprasList />} />
         <Route path="/compras/nueva" element={<ComprasForm />} />   
-        <Route path="/compras/:compraId" element={<CompraDetail />} />    
+        <Route path="/compras/:compraId" element={<CompraDetail />} />
+        <Route path="/clientes" element={<ClienteList />} />
+        <Route path="/clientes/nuevo" element={<ClienteForm />} />   
+        <Route path="/cliente/editar/:id" element={<ClienteEdit />} /> 
       </Routes>
     </div>
   );

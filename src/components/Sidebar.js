@@ -6,15 +6,17 @@ import {
 } from '@mui/material';
 import {
   ShoppingCart, Inventory, Receipt, CreditCard,
-  ExpandLess, ExpandMore, List as ListIcon, AddBox, Category, People
+  ExpandLess, ExpandMore, List as ListIcon, AddBox,
+  Category, People, Group
 } from '@mui/icons-material';
 
 const Sidebar = () => {
   const location = useLocation();
-  const [openStock, setOpenStock] = useState(true);
+  const [openStock, setOpenStock] = useState(false);
   const [openCategorias, setOpenCategorias] = useState(false);
   const [openProveedores, setOpenProveedores] = useState(false);
-  const [openCompras, setOpenCompras] = useState(false); // Agregado para Compras
+  const [openCompras, setOpenCompras] = useState(false);
+  const [openClientes, setOpenClientes] = useState(false); // NUEVO estado para Clientes
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -39,19 +41,11 @@ const Sidebar = () => {
         </ListItem>
         <Collapse in={openCompras} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/compras"
-              sx={{ pl: 4, ...isActive('/compras') }}
-            >
+            <ListItemButton component={Link} to="/compras" sx={{ pl: 4, ...isActive('/compras') }}>
               <ListItemIcon><ListIcon /></ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItemButton>
-            <ListItemButton
-              component={Link}
-              to="/compras/nueva"
-              sx={{ pl: 4, ...isActive('/compras/nueva') }}
-            >
+            <ListItemButton component={Link} to="/compras/nueva" sx={{ pl: 4, ...isActive('/compras/nueva') }}>
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar" />
             </ListItemButton>
@@ -69,19 +63,11 @@ const Sidebar = () => {
         </ListItem>
         <Collapse in={openStock} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/stock/listado"
-              sx={{ pl: 4, ...isActive('/stock/listado') }}
-            >
+            <ListItemButton component={Link} to="/stock/listado" sx={{ pl: 4, ...isActive('/stock/listado') }}>
               <ListItemIcon><ListIcon /></ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItemButton>
-            <ListItemButton
-              component={Link}
-              to="/stock/nuevo"
-              sx={{ pl: 4, ...isActive('/stock/nuevo') }}
-            >
+            <ListItemButton component={Link} to="/stock/nuevo" sx={{ pl: 4, ...isActive('/stock/nuevo') }}>
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar producto" />
             </ListItemButton>
@@ -117,19 +103,11 @@ const Sidebar = () => {
         </ListItem>
         <Collapse in={openCategorias} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/categorias"
-              sx={{ pl: 4, ...isActive('/categorias') }}
-            >
+            <ListItemButton component={Link} to="/categorias" sx={{ pl: 4, ...isActive('/categorias') }}>
               <ListItemIcon><ListIcon /></ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItemButton>
-            <ListItemButton
-              component={Link}
-              to="/categorias/nueva"
-              sx={{ pl: 4, ...isActive('/categorias/nueva') }}
-            >
+            <ListItemButton component={Link} to="/categorias/nueva" sx={{ pl: 4, ...isActive('/categorias/nueva') }}>
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar" />
             </ListItemButton>
@@ -147,19 +125,33 @@ const Sidebar = () => {
         </ListItem>
         <Collapse in={openProveedores} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton
-              component={Link}
-              to="/proveedores"
-              sx={{ pl: 4, ...isActive('/proveedores') }}
-            >
+            <ListItemButton component={Link} to="/proveedores" sx={{ pl: 4, ...isActive('/proveedores') }}>
               <ListItemIcon><ListIcon /></ListItemIcon>
               <ListItemText primary="Listado" />
             </ListItemButton>
-            <ListItemButton
-              component={Link}
-              to="/proveedores/nuevo"
-              sx={{ pl: 4, ...isActive('/proveedores/nuevo') }}
-            >
+            <ListItemButton component={Link} to="/proveedores/nuevo" sx={{ pl: 4, ...isActive('/proveedores/nuevo') }}>
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <Divider />
+
+        {/* Clientes */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => setOpenClientes(!openClientes)}>
+            <Group sx={{ marginRight: 2 }} />
+            <ListItemText primary="Clientes" />
+            {openClientes ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openClientes} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton component={Link} to="/clientes" sx={{ pl: 4, ...isActive('/clientes') }}>
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/clientes/nuevo" sx={{ pl: 4, ...isActive('/clientes/nuevo') }}>
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar" />
             </ListItemButton>
