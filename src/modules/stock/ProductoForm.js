@@ -1,7 +1,8 @@
-// src/modules/stock/ProductoForm.js
-import React, { useState } from 'react';
-import { TextField, Button, Paper, Typography } from '@mui/material';
-import { collection, addDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import {
+  TextField, Button, Paper, Typography, MenuItem, Select, InputLabel, FormControl
+} from '@mui/material';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
 const ProductoForm = () => {
@@ -17,6 +18,23 @@ const ProductoForm = () => {
     categoria: '',
     proveedor: ''
   });
+
+  const [categorias, setCategorias] = useState([]);
+  const [marcas, setMarcas] = useState([]);
+  const [proveedores, setProveedores] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const categoriasSnap = await getDocs(collection(db, 'categorias'));
+      const marcasSnap = await getDocs(collection(db, 'marcas'));
+      const proveedoresSnap = await getDocs(collection(db, 'proveedores'));
+
+      setCategorias(categoriasSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setMarcas(marcasSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setProveedores(proveedoresSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     setProducto({ ...producto, [e.target.name]: e.target.value });
@@ -60,10 +78,39 @@ const ProductoForm = () => {
         <TextField name="precioCompra" label="Precio de Compra" type="number" value={producto.precioCompra} onChange={handleChange} fullWidth margin="normal" required />
         <TextField name="precioVenta" label="Precio de Venta" type="number" value={producto.precioVenta} onChange={handleChange} fullWidth margin="normal" required />
         <TextField name="stockMinimo" label="Stock Mínimo" type="number" value={producto.stockMinimo} onChange={handleChange} fullWidth margin="normal" />
-        <TextField name="marca" label="Marca" value={producto.marca} onChange={handleChange} fullWidth margin="normal" />
+
+        {/* Marca */}
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Marca</InputLabel>
+          <Select name="marca" value={producto.marca} onChange={handleChange}>
+            {marcas.map((marca) => (
+              <MenuItem key={marca.id} value={marca.nombre}>{marca.nombre}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <TextField name="medida" label="Medida" value={producto.medida} onChange={handleChange} fullWidth margin="normal" />
-        <TextField name="categoria" label="Categoría" value={producto.categoria} onChange={handleChange} fullWidth margin="normal" />
-        <TextField name="proveedor" label="Proveedor" value={producto.proveedor} onChange={handleChange} fullWidth margin="normal" />
+
+        {/* Categoría */}
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Categoría</InputLabel>
+          <Select name="categoria" value={producto.categoria} onChange={handleChange}>
+            {categorias.map((cat) => (
+              <MenuItem key={cat.id} value={cat.nombre}>{cat.nombre}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Proveedor */}
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Proveedor</InputLabel>
+          <Select name="proveedor" value={producto.proveedor} onChange={handleChange}>
+            {proveedores.map((prov) => (
+              <MenuItem key={prov.id} value={prov.nombre}>{prov.nombre}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <TextField name="observacion" label="Observación" value={producto.observacion} onChange={handleChange} fullWidth margin="normal" multiline rows={3} />
         <Button type="submit" variant="contained" color="primary">Guardar</Button>
       </form>
