@@ -14,6 +14,7 @@ const Sidebar = () => {
   const [openStock, setOpenStock] = useState(true);
   const [openCategorias, setOpenCategorias] = useState(false);
   const [openProveedores, setOpenProveedores] = useState(false);
+  const [openCompras, setOpenCompras] = useState(false); // Agregado para Compras
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -30,11 +31,32 @@ const Sidebar = () => {
 
         {/* Compras */}
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/compras" sx={isActive('/compras')}>
+          <ListItemButton onClick={() => setOpenCompras(!openCompras)}>
             <ShoppingCart sx={{ marginRight: 2 }} />
             <ListItemText primary="Compras" />
+            {openCompras ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        <Collapse in={openCompras} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/compras"
+              sx={{ pl: 4, ...isActive('/compras') }}
+            >
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton
+              component={Link}
+              to="/compras/nueva"
+              sx={{ pl: 4, ...isActive('/compras/nueva') }}
+            >
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar" />
+            </ListItemButton>
+          </List>
+        </Collapse>
         <Divider />
 
         {/* Stock */}

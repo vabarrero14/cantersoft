@@ -10,9 +10,11 @@ import ProveedorList from '../modules/proveedor/ProveedorList';
 import MarcaForm from '../modules/marcas/MarcaForm';
 import MarcaList from '../modules/marcas/MarcaList';
 import ProductoEdit from '../modules/stock/ProductoEdit';
+import ComprasList from '../modules/compras/CompraList';
+import ComprasForm from '../modules/compras/CompraForm';
 
 
-const Compras = () => <div>Vista de Compras</div>;
+
 const Ventas = () => <div>Vista de Ventas</div>;
 const Caja = () => <div>Vista de Caja</div>;
 
@@ -20,7 +22,6 @@ const Content = () => {
   return (
     <div style={{ padding: 20, flexGrow: 1 }}>
       <Routes>
-        <Route path="/compras" element={<Compras />} />
         <Route path="/ventas" element={<Ventas />} />
         <Route path="/caja" element={<Caja />} />
         <Route path="/stock/listado" element={<ProductoList />} />
@@ -31,7 +32,9 @@ const Content = () => {
         <Route path="/proveedores/nuevo" element={<ProveedorForm />} />
         <Route path="/marcas" element={<MarcaList />} />
         <Route path="/marcas/nueva" element={<MarcaForm />} />
-        <Route path="/producto/editar/:id" element={<ProductoEdit />} />        
+        <Route path="/producto/editar/:id" element={<ProductoEdit />} />
+        <Route path="/compras" element={<ComprasList />} />
+        <Route path="/compras/nueva" element={<ComprasForm />} />       
       </Routes>
     </div>
   );
