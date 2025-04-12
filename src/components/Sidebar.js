@@ -1,4 +1,3 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -7,12 +6,13 @@ import {
 } from '@mui/material';
 import {
   ShoppingCart, Inventory, Receipt, CreditCard,
-  ExpandLess, ExpandMore, List as ListIcon, AddBox
+  ExpandLess, ExpandMore, List as ListIcon, AddBox, Category
 } from '@mui/icons-material';
 
 const Sidebar = () => {
   const location = useLocation();
   const [openStock, setOpenStock] = useState(true);
+  const [openCategorias, setOpenCategorias] = useState(false);
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -36,7 +36,7 @@ const Sidebar = () => {
         </ListItem>
         <Divider />
 
-        {/* Stock (menú desplegable) */}
+        {/* Stock */}
         <ListItem disablePadding>
           <ListItemButton onClick={() => setOpenStock(!openStock)}>
             <Inventory sx={{ marginRight: 2 }} />
@@ -82,6 +82,36 @@ const Sidebar = () => {
             <ListItemText primary="Caja" />
           </ListItemButton>
         </ListItem>
+        <Divider />
+
+        {/* Categorías */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => setOpenCategorias(!openCategorias)}>
+            <Category sx={{ marginRight: 2 }} />
+            <ListItemText primary="Categorías" />
+            {openCategorias ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openCategorias} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/categorias"
+              sx={{ pl: 4, ...isActive('/categorias') }}
+            >
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton
+              component={Link}
+              to="/categorias/nueva"
+              sx={{ pl: 4, ...isActive('/categorias/nueva') }}
+            >
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar" />
+            </ListItemButton>
+          </List>
+        </Collapse>
       </List>
     </div>
   );
