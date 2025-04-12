@@ -1,17 +1,24 @@
 // src/components/Sidebar.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { List, ListItemButton, ListItemText, Divider, ListItem } from '@mui/material';
-import { ShoppingCart, Inventory, Receipt, CreditCard } from '@mui/icons-material';
+import {
+  List, ListItemButton, ListItemText, Divider, ListItem,
+  Collapse, ListItemIcon
+} from '@mui/material';
+import {
+  ShoppingCart, Inventory, Receipt, CreditCard,
+  ExpandLess, ExpandMore, List as ListIcon, AddBox
+} from '@mui/icons-material';
 
 const Sidebar = () => {
-  const location = useLocation(); // Hook para obtener la ruta actual
+  const location = useLocation();
+  const [openStock, setOpenStock] = useState(true);
 
-  // Función para resaltar el item activo
-  const isActive = (path) => location.pathname === path ? { backgroundColor: '#1976d2', color: '#fff' } : {};
+  const isActive = (path) =>
+    location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
 
   return (
-    <div style={{ width: 250, height: '100vh', backgroundColor: '#fafafa', borderRight: '1px solid #ddd' }}>
+    <div style={{ width: 250, height: '100vh', backgroundColor: '#fafafa' }}>
       <List>
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/" sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
@@ -19,8 +26,8 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
-        
-        {/* Enlace a Compras */}
+
+        {/* Compras */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/compras" sx={isActive('/compras')}>
             <ShoppingCart sx={{ marginRight: 2 }} />
@@ -28,17 +35,38 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
-        
-        {/* Enlace a Stock */}
+
+        {/* Stock (menú desplegable) */}
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/stock" sx={isActive('/stock')}>
+          <ListItemButton onClick={() => setOpenStock(!openStock)}>
             <Inventory sx={{ marginRight: 2 }} />
             <ListItemText primary="Stock" />
+            {openStock ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        <Collapse in={openStock} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/stock/listado"
+              sx={{ pl: 4, ...isActive('/stock/listado') }}
+            >
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton
+              component={Link}
+              to="/stock/nuevo"
+              sx={{ pl: 4, ...isActive('/stock/nuevo') }}
+            >
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar producto" />
+            </ListItemButton>
+          </List>
+        </Collapse>
         <Divider />
-        
-        {/* Enlace a Ventas */}
+
+        {/* Ventas */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/ventas" sx={isActive('/ventas')}>
             <Receipt sx={{ marginRight: 2 }} />
@@ -46,8 +74,8 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <Divider />
-        
-        {/* Enlace a Caja */}
+
+        {/* Caja */}
         <ListItem disablePadding>
           <ListItemButton component={Link} to="/caja" sx={isActive('/caja')}>
             <CreditCard sx={{ marginRight: 2 }} />

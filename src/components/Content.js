@@ -1,7 +1,8 @@
 // src/components/Content.js
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import StockPage from '../modules/stock'; // Importamos el componente StockPage
+import { Route, Routes } from 'react-router-dom';
+import ProductoList from '../modules/stock/ProductoList';
+import ProductoForm from '../modules/stock/ProductoForm';
 
 const Compras = () => <div>Vista de Compras</div>;
 const Ventas = () => <div>Vista de Ventas</div>;
@@ -12,10 +13,10 @@ const Content = () => {
     <div style={{ padding: 20, flexGrow: 1 }}>
       <Routes>
         <Route path="/compras" element={<Compras />} />
-        <Route path="/stock" element={<StockPage />} /> {/* Ruta del módulo Stock */}
         <Route path="/ventas" element={<Ventas />} />
         <Route path="/caja" element={<Caja />} />
-        {/* Puedes agregar otras rutas si es necesario */}
+        <Route path="/stock/listado" element={<ProductoList />} />
+        <Route path="/stock/nuevo" element={<ProductoForm />} />
       </Routes>
     </div>
   );
