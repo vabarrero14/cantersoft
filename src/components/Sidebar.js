@@ -14,6 +14,7 @@ const Sidebar = () => {
   const [openStock, setOpenStock] = useState(true);
   const [openCategorias, setOpenCategorias] = useState(false);
   const [openProveedores, setOpenProveedores] = useState(false);
+  const [openMarcas, setOpenMarcas] = useState(false); // 👈 Agregado para Marcas
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -143,6 +144,37 @@ const Sidebar = () => {
             </ListItemButton>
           </List>
         </Collapse>
+        <Divider />
+
+        {/* Marcas */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => setOpenMarcas(!openMarcas)}>
+            <Inventory sx={{ marginRight: 2 }} />
+            <ListItemText primary="Marcas" />
+            {openMarcas ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openMarcas} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton
+              component={Link}
+              to="/marcas"
+              sx={{ pl: 4, ...isActive('/marcas') }}
+            >
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton
+              component={Link}
+              to="/marcas/nueva"
+              sx={{ pl: 4, ...isActive('/marcas/nueva') }}
+            >
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <Divider />
       </List>
     </div>
   );
