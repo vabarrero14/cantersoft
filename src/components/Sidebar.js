@@ -17,6 +17,7 @@ const Sidebar = () => {
   const [openProveedores, setOpenProveedores] = useState(false);
   const [openCompras, setOpenCompras] = useState(false);
   const [openClientes, setOpenClientes] = useState(false); // NUEVO estado para Clientes
+  const [openVentas, setOpenVentas] = useState(false); // NUEVO estado para Ventas
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -77,11 +78,24 @@ const Sidebar = () => {
 
         {/* Ventas */}
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/ventas" sx={isActive('/ventas')}>
+          <ListItemButton onClick={() => setOpenVentas(!openVentas)}>
             <Receipt sx={{ marginRight: 2 }} />
             <ListItemText primary="Ventas" />
+            {openVentas ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
+        <Collapse in={openVentas} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton component={Link} to="/ventas" sx={{ pl: 4, ...isActive('/ventas') }}>
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/ventas/nuevo" sx={{ pl: 4, ...isActive('/ventas/nuevo') }}>
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar venta" />
+            </ListItemButton>
+          </List>
+        </Collapse>
         <Divider />
 
         {/* Caja */}

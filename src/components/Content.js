@@ -16,19 +16,16 @@ import CompraDetail from '../modules/compras/CompraDetail';
 import ClienteList from '../modules/clientes/ClienteList';
 import ClienteForm from '../modules/clientes/ClienteForm';
 import ClienteEdit from '../modules/clientes/ClienteEdit'; 
+import VentaForm from '../modules/ventas/VentaForm'; 
+import VentaList from '../modules/ventas/VentaList';
+import VentaDetail from '../modules/ventas/VentaDetail';
 
-
-
-
-
-const Ventas = () => <div>Vista de Ventas</div>;
 const Caja = () => <div>Vista de Caja</div>;
 
 const Content = () => {
   return (
     <div style={{ padding: 20, flexGrow: 1 }}>
       <Routes>
-        <Route path="/ventas" element={<Ventas />} />
         <Route path="/caja" element={<Caja />} />
         <Route path="/stock/listado" element={<ProductoList />} />
         <Route path="/stock/nuevo" element={<ProductoForm />} />
@@ -44,7 +41,10 @@ const Content = () => {
         <Route path="/compras/:compraId" element={<CompraDetail />} />
         <Route path="/clientes" element={<ClienteList />} />
         <Route path="/clientes/nuevo" element={<ClienteForm />} />   
-        <Route path="/cliente/editar/:id" element={<ClienteEdit />} /> 
+        <Route path="/cliente/editar/:id" element={<ClienteEdit />} />
+        <Route path="/ventas/nuevo" element={<VentaForm />} />
+        <Route path="/ventas" element={<VentaList />} />
+        <Route path="/ventas/:ventaId" element={<VentaDetail />} />
       </Routes>
     </div>
   );
