@@ -16,8 +16,9 @@ const Sidebar = () => {
   const [openCategorias, setOpenCategorias] = useState(false);
   const [openProveedores, setOpenProveedores] = useState(false);
   const [openCompras, setOpenCompras] = useState(false);
-  const [openClientes, setOpenClientes] = useState(false); // NUEVO estado para Clientes
-  const [openVentas, setOpenVentas] = useState(false); // NUEVO estado para Ventas
+  const [openClientes, setOpenClientes] = useState(false);
+  const [openVentas, setOpenVentas] = useState(false);
+  const [openMarcas, setOpenMarcas] = useState(false); // NUEVO estado para Marcas
 
   const isActive = (path) =>
     location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
@@ -111,7 +112,7 @@ const Sidebar = () => {
         <ListItem disablePadding>
           <ListItemButton onClick={() => setOpenCategorias(!openCategorias)}>
             <Category sx={{ marginRight: 2 }} />
-            <ListItemText primary="Categorías" />
+            <ListItemText primary="Categorías de Productos" />
             {openCategorias ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </ListItem>
@@ -122,6 +123,28 @@ const Sidebar = () => {
               <ListItemText primary="Listado" />
             </ListItemButton>
             <ListItemButton component={Link} to="/categorias/nueva" sx={{ pl: 4, ...isActive('/categorias/nueva') }}>
+              <ListItemIcon><AddBox /></ListItemIcon>
+              <ListItemText primary="Agregar" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <Divider />
+
+        {/* Marcas */}
+        <ListItem disablePadding>
+          <ListItemButton onClick={() => setOpenMarcas(!openMarcas)}>
+            <Category sx={{ marginRight: 2 }} />
+            <ListItemText primary="Marcas de Productos" />
+            {openMarcas ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+        </ListItem>
+        <Collapse in={openMarcas} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton component={Link} to="/marcas" sx={{ pl: 4, ...isActive('/marcas') }}>
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Listado" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/marcas/nueva" sx={{ pl: 4, ...isActive('/marcas/nueva') }}>
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar" />
             </ListItemButton>
