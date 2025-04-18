@@ -1,210 +1,160 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  List, ListItemButton, ListItemText, Divider, ListItem,
-  Collapse, ListItemIcon
+import { useAuth } from '../context/AuthContext';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { 
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Typography,
+  Box,
+  Avatar,
+  IconButton,
+  useTheme
 } from '@mui/material';
 import {
-  ShoppingCart, Inventory, CreditCard,
-  ExpandLess, ExpandMore, List as ListIcon, AddBox,
-  Category, People, Group, Sell, Label
+  Dashboard as DashboardIcon,
+  Inventory as InventoryIcon,
+  Category as CategoryIcon,
+  LocalOffer as BrandIcon,
+  People as PeopleIcon,
+  ShoppingCart as ShoppingCartIcon,
+  PointOfSale as PointOfSaleIcon,
+  Receipt as ReceiptIcon,
+  ExitToApp as ExitToAppIcon,
+  ChevronLeft,
+  ChevronRight
 } from '@mui/icons-material';
 
-const Sidebar = () => {
+const drawerWidth = 240;
+
+const Sidebar = ({ open, handleDrawerToggle }) => {
+  const theme = useTheme();
   const location = useLocation();
-  const [openStock, setOpenStock] = useState(false);
-  const [openStockSubmenu, setOpenStockSubmenu] = useState({
-    productos: false,
-    categorias: false,
-    marcas: false
-  });
-  const [openCompras, setOpenCompras] = useState(false);
-  const [openClientes, setOpenClientes] = useState(false);
-  const [openVentas, setOpenVentas] = useState(false);
-  const [openProveedores, setOpenProveedores] = useState(false);
+  const { currentUser } = useAuth();
 
-  const isActive = (path) =>
-    location.pathname === path ? { backgroundColor: '#d3d3d3' } : {};
+  const menuItems = [
+    { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
+    { text: 'Productos', path: '/stock/listado', icon: <InventoryIcon /> },
+    { text: 'Categorías', path: '/categorias', icon: <CategoryIcon /> },
+    { text: 'Marcas', path: '/marcas', icon: <BrandIcon /> },
+    { text: 'Proveedores', path: '/proveedores', icon: <PeopleIcon /> },
+    { text: 'Compras', path: '/compras', icon: <ShoppingCartIcon /> },
+    { text: 'Clientes', path: '/clientes', icon: <PeopleIcon /> },
+    { text: 'Ventas', path: '/ventas', icon: <ReceiptIcon /> },
+    { text: 'Caja', path: '/caja', icon: <PointOfSaleIcon /> }
+  ];
 
-  const toggleStockSubmenu = (menu) => {
-    setOpenStockSubmenu({
-      ...openStockSubmenu,
-      [menu]: !openStockSubmenu[menu]
-    });
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   };
 
   return (
-    <div style={{ width: 250, height: '100vh', backgroundColor: '#fafafa' }}>
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+        },
+      }}
+      variant="persistent"
+      anchor="left"
+      open={open}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: theme.spacing(0, 1),
+          ...theme.mixins.toolbar,
+        }}
+      >
+        <Typography variant="h6" noWrap component="div">
+          Cantersoft
+        </Typography>
+        <IconButton onClick={handleDrawerToggle} color="inherit">
+          {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
+        </IconButton>
+      </Box>
+      <Divider />
+
+      {/* Perfil del usuario */}
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Avatar
+          sx={{ 
+            width: 64, 
+            height: 64, 
+            margin: '0 auto 8px',
+            bgcolor: theme.palette.secondary.main 
+          }}
+        >
+          {currentUser?.email?.charAt(0).toUpperCase()}
+        </Avatar>
+        <Typography variant="subtitle1">
+          {currentUser?.email}
+        </Typography>
+        <Typography variant="caption">
+          {currentUser?.roles?.join(', ') || 'Usuario'}
+        </Typography>
+      </Box>
+      <Divider />
+
+      {/* Menú principal */}
       <List>
-        <ListItem disablePadding>
-          <ListItemButton component={Link} to="/" sx={{ backgroundColor: '#1976d2', color: '#fff' }}>
-            <ListItemText primary="CanterSoft" />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-
-        {/* Compras */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => setOpenCompras(!openCompras)}>
-            <ShoppingCart sx={{ marginRight: 2 }} />
-            <ListItemText primary="Compras" />
-            {openCompras ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
-        <Collapse in={openCompras} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton component={Link} to="/compras" sx={{ pl: 4, ...isActive('/compras') }}>
-              <ListItemIcon><ListIcon /></ListItemIcon>
-              <ListItemText primary="Listado" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/compras/nueva" sx={{ pl: 4, ...isActive('/compras/nueva') }}>
-              <ListItemIcon><AddBox /></ListItemIcon>
-              <ListItemText primary="Agregar" />
-            </ListItemButton>
-          </List>
-        </Collapse>
-        <Divider />
-
-        {/* Stock - Módulo principal */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => setOpenStock(!openStock)}>
-            <Inventory sx={{ marginRight: 2 }} />
-            <ListItemText primary="Stock" />
-            {openStock ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
-        <Collapse in={openStock} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            
-            {/* Productos */}
-            <ListItemButton onClick={() => toggleStockSubmenu('productos')}>
-              <ListItemIcon><Inventory /></ListItemIcon>
-              <ListItemText primary="Productos" />
-              {openStockSubmenu.productos ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={openStockSubmenu.productos} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton component={Link} to="/stock/listado" sx={{ pl: 6, ...isActive('/stock/listado') }}>
-                  <ListItemText primary="Listado" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/stock/nuevo" sx={{ pl: 6, ...isActive('/stock/nuevo') }}>
-                  <ListItemText primary="Agregar" />
-                </ListItemButton>
-              </List>
-            </Collapse>
-
-            {/* Categorías */}
-            <ListItemButton onClick={() => toggleStockSubmenu('categorias')}>
-              <ListItemIcon><Category /></ListItemIcon>
-              <ListItemText primary="Categorías" />
-              {openStockSubmenu.categorias ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={openStockSubmenu.categorias} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton component={Link} to="/stock/categorias" sx={{ pl: 6, ...isActive('/stock/categorias') }}>
-                  <ListItemText primary="Listado" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/stock/categorias/nueva" sx={{ pl: 6, ...isActive('/stock/categorias/nueva') }}>
-                  <ListItemText primary="Agregar" />
-                </ListItemButton>
-              </List>
-            </Collapse>
-
-            {/* Marcas */}
-            <ListItemButton onClick={() => toggleStockSubmenu('marcas')}>
-              <ListItemIcon><Label /></ListItemIcon>
-              <ListItemText primary="Marcas" />
-              {openStockSubmenu.marcas ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={openStockSubmenu.marcas} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton component={Link} to="/stock/marcas" sx={{ pl: 6, ...isActive('/stock/marcas') }}>
-                  <ListItemText primary="Listado" />
-                </ListItemButton>
-                <ListItemButton component={Link} to="/stock/marcas/nueva" sx={{ pl: 6, ...isActive('/stock/marcas/nueva') }}>
-                  <ListItemText primary="Agregar" />
-                </ListItemButton>
-              </List>
-            </Collapse>
-          </List>
-        </Collapse>
-        <Divider />
-
-        {/* Ventas */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => setOpenVentas(!openVentas)}>
-            <Sell sx={{ marginRight: 2 }} />
-            <ListItemText primary="Ventas" />
-            {openVentas ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
-        <Collapse in={openVentas} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton component={Link} to="/ventas" sx={{ pl: 4, ...isActive('/ventas') }}>
-              <ListItemIcon><ListIcon /></ListItemIcon>
-              <ListItemText primary="Listado" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/ventas/nuevo" sx={{ pl: 4, ...isActive('/ventas/nuevo') }}>
-              <ListItemIcon><AddBox /></ListItemIcon>
-              <ListItemText primary="Agregar venta" />
-            </ListItemButton>
-          </List>
-        </Collapse>
-        <Divider />
-
-        {/* Caja */}
-        <ListItem disablePadding>
-          <ListItemButton component={Link} to="/caja" sx={isActive('/caja')}>
-            <CreditCard sx={{ marginRight: 2 }} />
-            <ListItemText primary="Caja" />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-
-        {/* Proveedores */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => setOpenProveedores(!openProveedores)}>
-            <People sx={{ marginRight: 2 }} />
-            <ListItemText primary="Proveedores" />
-            {openProveedores ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
-        <Collapse in={openProveedores} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton component={Link} to="/proveedores" sx={{ pl: 4, ...isActive('/proveedores') }}>
-              <ListItemIcon><ListIcon /></ListItemIcon>
-              <ListItemText primary="Listado" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/proveedores/nuevo" sx={{ pl: 4, ...isActive('/proveedores/nuevo') }}>
-              <ListItemIcon><AddBox /></ListItemIcon>
-              <ListItemText primary="Agregar" />
-            </ListItemButton>
-          </List>
-        </Collapse>
-        <Divider />
-
-        {/* Clientes */}
-        <ListItem disablePadding>
-          <ListItemButton onClick={() => setOpenClientes(!openClientes)}>
-            <Group sx={{ marginRight: 2 }} />
-            <ListItemText primary="Clientes" />
-            {openClientes ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
-        <Collapse in={openClientes} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton component={Link} to="/clientes" sx={{ pl: 4, ...isActive('/clientes') }}>
-              <ListItemIcon><ListIcon /></ListItemIcon>
-              <ListItemText primary="Listado" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/clientes/nuevo" sx={{ pl: 4, ...isActive('/clientes/nuevo') }}>
-              <ListItemIcon><AddBox /></ListItemIcon>
-              <ListItemText primary="Agregar" />
-            </ListItemButton>
-          </List>
-        </Collapse>
+        {menuItems.map((item) => (
+          <ListItem
+            button
+            key={item.text}
+            component={Link}
+            to={item.path}
+            selected={location.pathname.includes(item.path)}
+            sx={{
+              '&.Mui-selected': {
+                backgroundColor: theme.palette.action.selected,
+              },
+              '&:hover': {
+                backgroundColor: theme.palette.action.hover,
+              },
+            }}
+          >
+            <ListItemIcon sx={{ color: 'inherit' }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
       </List>
-    </div>
+      <Divider />
+
+      {/* Cerrar sesión */}
+      <List>
+        <ListItem
+          button
+          onClick={handleLogout}
+          sx={{
+            '&:hover': {
+              backgroundColor: theme.palette.action.hover,
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: 'inherit' }}>
+            <ExitToAppIcon />
+          </ListItemIcon>
+          <ListItemText primary="Cerrar sesión" />
+        </ListItem>
+      </List>
+    </Drawer>
   );
 };
 

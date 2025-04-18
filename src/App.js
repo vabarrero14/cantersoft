@@ -1,29 +1,20 @@
-// src/App.js
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React, { useState } from 'react';
+import { AuthProvider } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import Content from './components/Content';
-import { Box, CssBaseline, Typography } from '@mui/material';
-import app from './firebase/config';
+import { Box, CssBaseline } from '@mui/material';
 
 const App = () => {
-  useEffect(() => {
-    console.log("🔥 Firebase conectado:", app.name);
-  }, []);
+  const [open, setOpen] = useState(true);
 
   return (
-    <Router>
+    <AuthProvider>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Sidebar />
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h4">
-            {/* Título del módulo activo o general */}
-          </Typography>
-          <Content />
-        </Box>
+        <Sidebar open={open} handleDrawerToggle={() => setOpen(!open)} />
+        <Content /> {/* Aquí vivirán todas tus rutas */}
       </Box>
-    </Router>
+    </AuthProvider>
   );
 };
 
