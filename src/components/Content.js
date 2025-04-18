@@ -1,4 +1,3 @@
-// src/components/Content.js
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ProductoList from '../modules/stock/ProductoList';
@@ -7,6 +6,7 @@ import CategoriaForm from '../modules/categorias/CategoriaForm';
 import CategoriaList from '../modules/categorias/CategoriaList';
 import ProveedorForm from '../modules/proveedor/ProveedorForm';
 import ProveedorList from '../modules/proveedor/ProveedorList';
+import ProveedorEdit from '../modules/proveedor/ProveedorEdit';
 import MarcaForm from '../modules/marcas/MarcaForm';
 import MarcaList from '../modules/marcas/MarcaList';
 import ProductoEdit from '../modules/stock/ProductoEdit';
@@ -27,26 +27,42 @@ const Content = () => {
   return (
     <div style={{ padding: 20, flexGrow: 1 }}>
       <Routes>
+        {/* Rutas principales */}
         <Route path="/caja" element={<Caja />} />
+        
+        {/* Rutas de Stock */}
         <Route path="/stock/listado" element={<ProductoList />} />
         <Route path="/stock/nuevo" element={<ProductoForm />} />
-        <Route path="/categorias" element={<CategoriaList />} />
-        <Route path="/categorias/nueva" element={<CategoriaForm />} />
+        <Route path="/producto/editar/:id" element={<ProductoEdit />} />
+        <Route path="/productos/:productoId/movimientos" element={<MovimientosProducto />} />
+        
+        {/* Rutas de Categorías */}
+        <Route path="/stock/categorias" element={<CategoriaList />} />
+        <Route path="/stock/categorias/nueva" element={<CategoriaForm />} />
+        
+        {/* Rutas de Marcas */}
+        <Route path="/stock/marcas" element={<MarcaList />} />
+        <Route path="/stock/marcas/nueva" element={<MarcaForm />} />
+        
+        {/* Rutas de Proveedores */}
         <Route path="/proveedores" element={<ProveedorList />} />
         <Route path="/proveedores/nuevo" element={<ProveedorForm />} />
-        <Route path="/marcas" element={<MarcaList />} />
-        <Route path="/marcas/nueva" element={<MarcaForm />} />
-        <Route path="/producto/editar/:id" element={<ProductoEdit />} />
+        <Route path="/proveedor/editar/:id" element={<ProveedorEdit />} />
+        
+        {/* Rutas de Compras */}
         <Route path="/compras" element={<ComprasList />} />
-        <Route path="/compras/nueva" element={<ComprasForm />} />   
+        <Route path="/compras/nueva" element={<ComprasForm />} />
         <Route path="/compras/:compraId" element={<CompraDetail />} />
+        
+        {/* Rutas de Clientes */}
         <Route path="/clientes" element={<ClienteList />} />
-        <Route path="/clientes/nuevo" element={<ClienteForm />} />   
+        <Route path="/clientes/nuevo" element={<ClienteForm />} />
         <Route path="/cliente/editar/:id" element={<ClienteEdit />} />
-        <Route path="/ventas/nuevo" element={<VentaForm />} />
+        
+        {/* Rutas de Ventas */}
         <Route path="/ventas" element={<VentaList />} />
+        <Route path="/ventas/nuevo" element={<VentaForm />} />
         <Route path="/ventas/:ventaId" element={<VentaDetail />} />
-        <Route path="/productos/:productoId/movimientos" element={<MovimientosProducto />} />
       </Routes>
     </div>
   );

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextField, Button, Paper, Typography, Box,
   Grid, Divider, Alert
 } from '@mui/material';
-import { collection, addDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'; // Añadido deleteDoc aquí
+import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/config';
 
-const ProveedorForm = () => {
+const ProveedorEdit = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -23,6 +24,29 @@ const ProveedorForm = () => {
     observaciones: ''
   });
 
+  useEffect(() => {
+    const fetchProveedor = async () => {
+      try {
+        setLoading(true);
+        const proveedorDoc = await getDoc(doc(db, 'proveedores', id));
+        
+        if (proveedorDoc.exists()) {
+          setProveedor(proveedorDoc.data());
+        } else {
+          setError('Proveedor no encontrado');
+          navigate('/proveedores');
+        }
+      } catch (err) {
+        setError('Error al cargar el proveedor');
+        console.error("Error fetching proveedor:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProveedor();
+  }, [id, navigate]);
+
   const handleChange = (e) => {
     setProveedor({ ...proveedor, [e.target.name]: e.target.value });
   };
@@ -32,28 +56,43 @@ const ProveedorForm = () => {
     setLoading(true);
     setError(null);
     
-    if (!proveedor.nombre || !proveedor.razonSocial || !proveedor.ruc) {
-      setError('Nombre, Razón Social y RUC son campos obligatorios');
-      setLoading(false);
-      return;
-    }
-
     try {
-      await addDoc(collection(db, 'proveedores'), proveedor);
-      setSuccess('Proveedor agregado con éxito');
+      await updateDoc(doc(db, 'proveedores', id), proveedor);
+      setSuccess('Proveedor actualizado correctamente');
       setTimeout(() => navigate('/proveedores'), 1500);
-    } catch (error) {
-      setError('Error al guardar el proveedor');
-      console.error("Error al guardar:", error);
+    } catch (err) {
+      setError('Error al actualizar el proveedor');
+      console.error("Error updating proveedor:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleDelete = async () => {
+    if (window.confirm('¿Estás seguro de eliminar este proveedor?')) {
+      try {
+        await deleteDoc(doc(db, 'proveedores', id));
+        alert('Proveedor eliminado correctamente');
+        navigate('/proveedores');
+      } catch (err) {
+        setError('Error al eliminar el proveedor');
+        console.error("Error deleting proveedor:", err);
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" p={3}>
+        <Typography>Cargando proveedor...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Paper elevation={3} sx={{ p: 3, maxWidth: 800, margin: 'auto' }}>
       <Typography variant="h5" gutterBottom>
-        Nuevo Proveedor
+        Editar Proveedor
       </Typography>
       
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -70,7 +109,6 @@ const ProveedorForm = () => {
               fullWidth
               margin="normal"
               required
-              disabled={loading}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -81,8 +119,6 @@ const ProveedorForm = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
-              required
-              disabled={loading}
             />
           </Grid>
           
@@ -94,8 +130,6 @@ const ProveedorForm = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
-              required
-              disabled={loading}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -106,7 +140,6 @@ const ProveedorForm = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
-              disabled={loading}
             />
           </Grid>
           
@@ -118,7 +151,6 @@ const ProveedorForm = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
-              disabled={loading}
               multiline
               rows={2}
             />
@@ -133,7 +165,6 @@ const ProveedorForm = () => {
               fullWidth
               margin="normal"
               type="email"
-              disabled={loading}
             />
           </Grid>
           
@@ -145,7 +176,6 @@ const ProveedorForm = () => {
               onChange={handleChange}
               fullWidth
               margin="normal"
-              disabled={loading}
               multiline
               rows={3}
             />
@@ -154,26 +184,38 @@ const ProveedorForm = () => {
 
         <Divider sx={{ my: 3 }} />
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
           <Button
-            variant="outlined"
-            onClick={() => navigate('/proveedores')}
-            disabled={loading}
-          >
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
             variant="contained"
-            color="primary"
+            color="error"
+            onClick={handleDelete}
             disabled={loading}
           >
-            {loading ? 'Guardando...' : 'Guardar Proveedor'}
+            Eliminar Proveedor
           </Button>
+          
+          <Box>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/proveedores')}
+              sx={{ mr: 2 }}
+              disabled={loading}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={loading}
+            >
+              {loading ? 'Guardando...' : 'Guardar Cambios'}
+            </Button>
+          </Box>
         </Box>
       </form>
     </Paper>
   );
 };
 
-export default ProveedorForm;
+export default ProveedorEdit;
