@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { Table, TableHead, TableRow, TableCell, TableBody, Typography, Box, Button, TableContainer, Paper, Grid } from '@mui/material';
+import { 
+  Table, TableHead, TableRow, TableCell, TableBody, 
+  Typography, Box, Button, TableContainer, Paper, 
+  IconButton, Tooltip 
+} from '@mui/material';
+import { 
+  Edit as EditIcon, 
+  Delete as DeleteIcon, 
+  List as ListIcon,
+  Add as AddIcon
+} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 const ProductoList = () => {
@@ -42,69 +52,71 @@ const ProductoList = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>Lista de Productos</Typography>
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={() => navigate('/producto/nuevo')}
-        sx={{ mb: 2 }}
-      >
-        Nuevo Producto
-      </Button>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6">Lista de Productos</Typography>
+        <Button 
+          variant="contained" 
+          startIcon={<AddIcon />}
+          onClick={() => navigate('/producto/nuevo')}
+        >
+          Nuevo
+        </Button>
+      </Box>
       
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={{ maxHeight: 'calc(100vh - 180px)', overflow: 'auto' }}>
+        <Table size="small" stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Código</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Stock</TableCell>
-              <TableCell>Precio Compra</TableCell>
-              <TableCell>Precio Venta</TableCell>
-              <TableCell>Acciones</TableCell>
+              <TableCell sx={{ width: '80px' }}>Código</TableCell>
+              <TableCell sx={{ minWidth: '120px' }}>Nombre</TableCell>
+              <TableCell sx={{ width: '70px' }} align="right">Stock</TableCell>
+              <TableCell sx={{ width: '90px' }} align="right">Compra</TableCell>
+              <TableCell sx={{ width: '90px' }} align="right">Venta</TableCell>
+              <TableCell sx={{ width: '90px' }} align="right">Mínimo</TableCell>
+              <TableCell sx={{ minWidth: '120px' }}>Proveedor</TableCell>
+              <TableCell sx={{ width: '140px' }} align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {productos.map((prod) => (
-              <TableRow key={prod.id}>
+              <TableRow key={prod.id} hover>
                 <TableCell>{prod.codigo}</TableCell>
                 <TableCell>{prod.nombre}</TableCell>
-                <TableCell>{prod.cantidad}</TableCell>
-                <TableCell>${prod.precioCompra}</TableCell>
-                <TableCell>${prod.precioVenta}</TableCell>
-                <TableCell>
-                  <Grid container spacing={1}>
-                    <Grid item>
-                      <Button
-                        variant="contained"
-                        color="warning"
+                <TableCell align="right">{prod.cantidad}</TableCell>
+                <TableCell align="right">${prod.precioCompra}</TableCell>
+                <TableCell align="right">${prod.precioVenta}</TableCell>
+                <TableCell align="right">{prod.stockMinimo || '-'}</TableCell>
+                <TableCell>{prod.proveedor || '-'}</TableCell>
+                <TableCell align="center">
+                  <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                    <Tooltip title="Editar">
+                      <IconButton
+                        color="primary"
                         onClick={() => handleEdit(prod.id)}
                         size="small"
                       >
-                        Editar
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Eliminar">
+                      <IconButton
                         color="error"
                         onClick={() => handleDelete(prod.id)}
                         size="small"
                       >
-                        Eliminar
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        variant="contained"
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Movimientos">
+                      <IconButton
                         color="info"
                         onClick={() => handleMovimientos(prod.id)}
                         size="small"
                       >
-                        Movimientos
-                      </Button>
-                    </Grid>
-                  </Grid>
+                        <ListIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}
