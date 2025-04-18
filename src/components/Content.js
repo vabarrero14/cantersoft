@@ -19,6 +19,7 @@ import ClienteEdit from '../modules/clientes/ClienteEdit';
 import VentaForm from '../modules/ventas/VentaForm'; 
 import VentaList from '../modules/ventas/VentaList';
 import VentaDetail from '../modules/ventas/VentaDetail';
+import MovimientosProducto from '../modules/stock/MovimientoProductos';
 
 const Caja = () => <div>Vista de Caja</div>;
 
@@ -45,6 +46,7 @@ const Content = () => {
         <Route path="/ventas/nuevo" element={<VentaForm />} />
         <Route path="/ventas" element={<VentaList />} />
         <Route path="/ventas/:ventaId" element={<VentaDetail />} />
+        <Route path="/productos/:productoId/movimientos" element={<MovimientosProducto />} />
       </Routes>
     </div>
   );

@@ -1,4 +1,3 @@
-// src/modules/stock/ProductoList.js
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -7,11 +6,17 @@ import { useNavigate } from 'react-router-dom';
 
 const ProductoList = () => {
   const [productos, setProductos] = useState([]);
-  const navigate = useNavigate();  // Para navegar a la página de edición
+  const navigate = useNavigate();
 
   const cargarProductos = async () => {
     const snapshot = await getDocs(collection(db, 'productos'));
-    const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const docs = snapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      ...doc.data(),
+      cantidad: doc.data().cantidad || 0,
+      precioCompra: doc.data().precioCompra?.toFixed(2) || '0.00',
+      precioVenta: doc.data().precioVenta?.toFixed(2) || '0.00'
+    }));
     setProductos(docs);
   };
 
@@ -19,42 +24,43 @@ const ProductoList = () => {
     cargarProductos();
   }, []);
 
-  // Función para manejar la edición de un producto
   const handleEdit = (id) => {
-    navigate(`/producto/editar/${id}`);  // Redirige al formulario de edición
+    navigate(`/producto/editar/${id}`);
   };
 
-  // Función para eliminar un producto
   const handleDelete = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
       await deleteDoc(doc(db, 'productos', id));
-      cargarProductos();  // Vuelve a cargar los productos después de eliminar
+      cargarProductos();
       alert('Producto eliminado con éxito');
     }
   };
 
-  // Función para manejar los movimientos (luego se implementará)
   const handleMovimientos = (id) => {
-    console.log('Ver movimientos del producto con ID:', id);
-    // Aquí puedes implementar la lógica para mostrar los movimientos del producto más adelante
+    navigate(`/productos/${id}/movimientos`);
   };
 
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>Lista de Productos</Typography>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={() => navigate('/producto/nuevo')}
+        sx={{ mb: 2 }}
+      >
+        Nuevo Producto
+      </Button>
+      
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Codigo</TableCell>
+              <TableCell>Código</TableCell>
               <TableCell>Nombre</TableCell>
-              <TableCell>Cantidad</TableCell>
+              <TableCell>Stock</TableCell>
               <TableCell>Precio Compra</TableCell>
               <TableCell>Precio Venta</TableCell>
-              <TableCell>Marca</TableCell>
-              <TableCell>Proveedor</TableCell>
-              <TableCell>Categoría</TableCell>
-              <TableCell>Stock Mínimo</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -64,25 +70,16 @@ const ProductoList = () => {
                 <TableCell>{prod.codigo}</TableCell>
                 <TableCell>{prod.nombre}</TableCell>
                 <TableCell>{prod.cantidad}</TableCell>
-                <TableCell>{prod.precioCompra}</TableCell>
-                <TableCell>{prod.precioVenta}</TableCell>
-                <TableCell>{prod.marca}</TableCell>
-                <TableCell>{prod.proveedor}</TableCell>
-                <TableCell>{prod.categoria}</TableCell>
-                <TableCell>{prod.stockMinimo}</TableCell>
+                <TableCell>${prod.precioCompra}</TableCell>
+                <TableCell>${prod.precioVenta}</TableCell>
                 <TableCell>
-                  <Grid container spacing={0.5} justifyContent="flex-start">
+                  <Grid container spacing={1}>
                     <Grid item>
                       <Button
                         variant="contained"
-                        color="warning"  // Amarillo para editar
+                        color="warning"
                         onClick={() => handleEdit(prod.id)}
                         size="small"
-                        style={{
-                          minWidth: 40,  // Reducido a 40
-                          padding: '2px 4px',  // Menos padding
-                          fontSize: '0.7rem'  // Tamaño de fuente aún más pequeño
-                        }}
                       >
                         Editar
                       </Button>
@@ -90,14 +87,9 @@ const ProductoList = () => {
                     <Grid item>
                       <Button
                         variant="contained"
-                        color="error"  // Rojo para eliminar
+                        color="error"
                         onClick={() => handleDelete(prod.id)}
                         size="small"
-                        style={{
-                          minWidth: 40,  // Reducido a 40
-                          padding: '2px 4px',  // Menos padding
-                          fontSize: '0.7rem'  // Tamaño de fuente aún más pequeño
-                        }}
                       >
                         Eliminar
                       </Button>
@@ -105,14 +97,9 @@ const ProductoList = () => {
                     <Grid item>
                       <Button
                         variant="contained"
-                        color="success"  // Verde para movimientos
+                        color="info"
                         onClick={() => handleMovimientos(prod.id)}
                         size="small"
-                        style={{
-                          minWidth: 40,  // Reducido a 40
-                          padding: '2px 4px',  // Menos padding
-                          fontSize: '0.7rem'  // Tamaño de fuente aún más pequeño
-                        }}
                       >
                         Movimientos
                       </Button>

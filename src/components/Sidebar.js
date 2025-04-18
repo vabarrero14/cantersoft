@@ -73,6 +73,10 @@ const Sidebar = () => {
               <ListItemIcon><AddBox /></ListItemIcon>
               <ListItemText primary="Agregar producto" />
             </ListItemButton>
+            <ListItemButton component={Link} to="/stock/MovimientosProductos" sx={{ pl: 4, ...isActive('/stock/MovimientosProductos') }}>
+              <ListItemIcon><Receipt /></ListItemIcon>
+              <ListItemText primary="Movimientos" />
+            </ListItemButton>
           </List>
         </Collapse>
         <Divider />
