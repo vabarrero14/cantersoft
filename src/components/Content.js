@@ -16,6 +16,7 @@ import CategoriaForm from '../modules/categorias/CategoriaForm';
 // Componentes de Marcas
 import MarcaList from '../modules/marcas/MarcaList';
 import MarcaForm from '../modules/marcas/MarcaForm';
+import MarcaEdit from '../modules/marcas/MarcaEdit';
 
 // Componentes de Proveedores
 import ProveedorList from '../modules/proveedor/ProveedorList';
@@ -82,6 +83,7 @@ const Content = () => {
         {/* Marcas */}
         <Route path="/marcas" element={<ProtectedRoute element={<MarcaList />} />} />
         <Route path="/marcas/nueva" element={<ProtectedRoute element={<MarcaForm />} />} />
+        <Route path="/marca/editar/:id" element={<ProtectedRoute element={<MarcaEdit />} />} />
 
         {/* Proveedores */}
         <Route path="/proveedores" element={<ProtectedRoute element={<ProveedorList />} />} />
