@@ -12,6 +12,7 @@ import MovimientosProducto from '../modules/stock/MovimientoProductos';
 // Componentes de Categorías
 import CategoriaList from '../modules/categorias/CategoriaList';
 import CategoriaForm from '../modules/categorias/CategoriaForm';
+import CategoriaEdit from '../modules/categorias/CategoriaEdit';
 
 // Componentes de Marcas
 import MarcaList from '../modules/marcas/MarcaList';
@@ -79,6 +80,7 @@ const Content = () => {
         {/* Categorías */}
         <Route path="/categorias" element={<ProtectedRoute element={<CategoriaList />} />} />
         <Route path="/categorias/nueva" element={<ProtectedRoute element={<CategoriaForm />} />} />
+        <Route path="/categorias/editar/:id" element={<ProtectedRoute element={<CategoriaEdit />} />} />
 
         {/* Marcas */}
         <Route path="/marcas" element={<ProtectedRoute element={<MarcaList />} />} />

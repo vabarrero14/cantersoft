@@ -59,7 +59,7 @@ const ProductoList = () => {
           startIcon={<AddIcon />}
           onClick={() => navigate('/stock/nuevo')}
         >
-          Nuevo
+          Nuevo Producto
         </Button>
       </Box>
       
