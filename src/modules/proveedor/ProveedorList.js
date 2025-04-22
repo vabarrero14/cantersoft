@@ -56,7 +56,7 @@ const ProveedorList = () => {
         <Button 
           variant="contained" 
           startIcon={<AddIcon />}
-          onClick={() => navigate('/proveedor/nuevo')}
+          onClick={() => navigate('/proveedores/nuevo')}
         >
           Nuevo Proveedor
         </Button>

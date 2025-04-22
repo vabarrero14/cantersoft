@@ -57,7 +57,7 @@ const ProductoList = () => {
         <Button 
           variant="contained" 
           startIcon={<AddIcon />}
-          onClick={() => navigate('/producto/nuevo')}
+          onClick={() => navigate('/stock/nuevo')}
         >
           Nuevo
         </Button>

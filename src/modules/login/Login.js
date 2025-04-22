@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../../firebase/config';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase/config';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Archivo de estilos (opcional)
 
@@ -27,14 +27,14 @@ const Login = () => {
   };
 
   // Login con Google
-  const handleGoogleLogin = async () => {
+  /*const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
       navigate('/dashboard');
     } catch (err) {
       setError(handleAuthError(err.code));
     }
-  };
+  };*/
 
   // Mapeo de errores de Firebase a mensajes amigables
   const handleAuthError = (code) => {
@@ -88,19 +88,7 @@ const Login = () => {
         </button>
       </form>
 
-      <div className="separator">o</div>
 
-      <button 
-        onClick={handleGoogleLogin} 
-        className="google-btn"
-        type="button"
-      >
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
-          alt="Google logo" 
-        />
-        Continuar con Google
-      </button>
 
       <div className="footer-links">
         <a href="/forgot-password">¿Olvidaste tu contraseña?</a>

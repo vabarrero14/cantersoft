@@ -53,7 +53,7 @@ const ClienteList = () => {
         <Button 
           variant="contained" 
           startIcon={<AddIcon />}
-          onClick={() => navigate('/cliente/nuevo')}
+          onClick={() => navigate('/clientes/nuevo')}
         >
           Nuevo Cliente
         </Button>

@@ -86,7 +86,7 @@ const VentaList = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => navigate('/ventas/nueva')}
+        onClick={() => navigate('/ventas/nuevo')}
         sx={{ mb: 2 }}
       >
         Nueva Venta
